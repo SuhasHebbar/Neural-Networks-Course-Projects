@@ -1,0 +1,49 @@
+The model takes RGB images of resoultion 64 x 64 as input.
+
+The layers are as follows:  
+    * Convolution layer with 32  3x3 filters and ReLU activation with (1,1) stride  
+    * Convolution layer with 64  3x3 filters and ReLU activation with (1,1) stride  
+    * Max Pool layer with 2x2 window  
+    * Dropout of 0.1 (0.1x neurons randomly selected in input will be ignored while training)  
+    * Convolution layer with 128  3x3 filters and ReLU activation with (1,1) stride  
+    * Max Pool layer with 2x2 window  
+    * Convolution layer with 256  3x3 filters and ReLU activation with (1,1) stride  
+    * Max Pool layer with 2x2 window  
+    * Dropout of 0.1 (And also flattening the tensor output  
+    * Fully Connected layer of 256 neurons  
+    * Dropout of 0.1  
+    * Fully Connected layer of 128 neurons  
+    * Dropout of 0.1  
+    * Fully Connected output layer of 8 neurons with softmax activation
+
+
+
+To predict class number for a single image read using opencv (cv2.imread(path))
+
+import cv2
+import pepperfry_2015A7PS0163G
+from keras.models import load_model
+img = cv2.imread(path)
+model = load_model('2015A7PS0163G.h5')
+ypred = pepperfry_2015A7PS0163G.predict(model, img) #Returns integer in range 0-7
+
+
+
+To generate the model:
+
+from pepperfry_2015A7PS0163G import generate_and_train_model
+generate_and_train_model(dataset_path)
+
+
+To test model:
+
+from pepperfry_2015A7PS0163G import print_metrics, load_test_data
+# model will be the trained CNN model
+# X_test is the input to be tested obtained using load_test_data(path to folder containing test data)
+# load_test_data uses os.listdir to get image paths
+# Y_test is the true output
+from keras.models import load_model
+model = load_model('2015A7PS0163G.h5')
+print_metrics(model, X_test, Y_test)
+
+
